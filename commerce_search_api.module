@@ -199,6 +199,7 @@ function commerce_search_api_generate_facets($index_machine_name) {
   }
   $product_attributes = commerce_info_fields('taxonomy_term_reference', 'commerce_product');
   $realm = facetapi_realm_load('block');
+  $search_api_ranges_exists = module_exists('search_api_ranges');
   foreach (facetapi_get_facet_info($searcher) as $field_name => $facet_info) {
     $export_facet = FALSE;
     if (isset($facet_info['field type']) && $facet_info['field type'] == 'taxonomy_term') {
@@ -206,7 +207,7 @@ function commerce_search_api_generate_facets($index_machine_name) {
       $widget = 'facetapi_checkbox_links';
       $export_facet = TRUE;
     }
-    if (strpos($field_name, 'amount_decimal') !== FALSE && strpos($field_name, ':') !== FALSE) {
+    if ($search_api_ranges_exists && strpos($field_name, ':amount_decimal') !== FALSE) {
       $facet = $adapter->getFacetSettings($facet_info, $realm);
       $widget = 'search_api_ranges_ui_slider';
       $export_facet = TRUE;
