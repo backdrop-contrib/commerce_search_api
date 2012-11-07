@@ -146,7 +146,7 @@ function commerce_search_api_generate_product_display_index(SearchApiServer $ser
         ),
         // We're also indexing the name property of the taxonomy term.
         $field_name . ':name' => array(
-          'type' => search_api_nest_type('string', $field['type']),
+          'type' => search_api_nest_type('text', $field['type']),
         ),
       );
     }
