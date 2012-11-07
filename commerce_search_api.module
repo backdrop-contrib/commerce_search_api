@@ -87,6 +87,9 @@ function commerce_search_api_generate_product_display_index(SearchApiServer $ser
         'status' => array(
           'type' => 'integer',
         ),
+        'search_api_aggregation_1' => array(
+          'type' => 'text',
+        ),
       ),
       'data_alter_callbacks' => array(
         'commerce_search_api_product_display_filter' => array(
