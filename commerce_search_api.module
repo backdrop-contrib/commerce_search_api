@@ -36,13 +36,13 @@ function commerce_search_api_default_search_api_index() {
  * Generate a SearchApiIndex with common defaults configuration.
  *
  * @param SearchApiServer $server
- *  The server the generated index will resides on.
+ *   The server the generated index will resides on.
  *
  * @param $index_machine_name
- *  The machine name of the generated index.
+ *   The machine name of the generated index.
  *
  * @return SearchApiIndex
- *  The generated SearchApiIndex.
+ *   The generated SearchApiIndex.
  */
 function commerce_search_api_generate_product_display_index(SearchApiServer $server, $index_machine_name) {
   $product_reference_fields = commerce_info_fields('commerce_product_reference', 'node');
@@ -140,7 +140,7 @@ function commerce_search_api_generate_product_display_index(SearchApiServer $ser
     // Index term reference fields.
     if (isset($field['entity_type']) && $field['entity_type'] == 'taxonomy_term') {
       $values['options']['fields'] += array(
-        $field_name =>  array(
+        $field_name => array(
           'type' => $field['type'],
           'entity_type' => $field['entity_type'],
         ),
@@ -154,7 +154,7 @@ function commerce_search_api_generate_product_display_index(SearchApiServer $ser
       // Index the price decimal property.
       if ($field_name == $product_reference_field['field_name'] . ':commerce_price:amount_decimal') {
         $values['options']['fields'] += array(
-          $field_name =>  array(
+          $field_name => array(
             'type' => $field['type'],
           ),
         );
@@ -187,10 +187,10 @@ function commerce_search_api_generate_product_display_index(SearchApiServer $ser
  * Generate and enable facetapi facets with some defaults.
  *
  * @param $index_machine_name
- *  The machine name of the index.
+ *   The machine name of the index.
  *
  * @return array
- *  An array of facets exports with some default configurations.
+ *   An array of facets exports with some default configurations.
  */
 function commerce_search_api_generate_facets($index_machine_name) {
   $export = array();
@@ -232,7 +232,7 @@ function commerce_search_api_generate_facets($index_machine_name) {
             $facet->settings['filters'] += array(
               'useless_searches' => array(
                 'status' => 1,
-                'weight' => 0
+                'weight' => 0,
               ),
               'hide_search_start' => array(
                 'status' => 1,
@@ -266,13 +266,13 @@ function commerce_search_api_entity_property_info_alter(&$info) {
       $properties[$field_name . '_' . $entity_type] = array(
         'description' => t('A bridge to @entity_type referenced by @field_name', array(
           '@entity_type' => $entity_type,
-          '@field_name' => $field_name
+          '@field_name' => $field_name,
         )),
         'getter callback' => 'commerce_search_api_backreference_getter',
         'field' => $field,
         'label' => t('A bridge to @entity_type referenced by @field_name', array(
           '@entity_type' => $entity_type,
-          '@field_name' => $field_name
+          '@field_name' => $field_name,
         )),
         'target type' => $entity_type,
         'type' => 'list<' . $entity_type . '>',
@@ -334,4 +334,3 @@ function commerce_search_api_facetapi_filters() {
   );
   return $filters;
 }
-
