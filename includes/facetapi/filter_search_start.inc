@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file FacetApiFilter, remove items that should not appear on empty search.
+ * @file
+ * FacetApiFilter, remove items that should not appear on empty search.
  */
 
 /**

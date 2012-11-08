@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file FacetApiFilter, filter out items that do not change search results.
+ * @file
+ * FacetApiFilter, filter out items that do not change search results.
  */
 
 /**

@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file Product display data alteration callback.
+ * @file
+ * Product display data alteration callback.
  */
 
 /**
@@ -15,6 +16,7 @@ class CommerceSearchApiProductDisplayFilter extends SearchApiAbstractAlterCallba
    *
    * @param SearchApiIndex $index
    *   The SearchApiIndex this data alteration callback resides on.
+   *
    * @return bool
    *   A boolean whether or not this index is supported.
    */
