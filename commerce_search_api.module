@@ -167,7 +167,7 @@ function commerce_search_api_generate_product_display_index(SearchApiServer $ser
         ),
       );
       // Check if the fulltext search is enabled for this taxonomy field.
-      if (variable_get('commerce_search_api_' . $field_name . '_fulltext', 1)) {
+      if (strpos($field_name, ':') === FALSE && variable_get('commerce_search_api_' . $field_name . '_fulltext', 1)) {
         $values['options']['data_alter_callbacks']['search_api_alter_add_aggregation']['settings']['fields'] += array(
           'search_api_aggregation_' . $aggregation_index => array(
             'name' => t('@field name (Fulltext)', array('@field' => $field['name'])),
