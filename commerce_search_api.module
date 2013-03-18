@@ -23,11 +23,19 @@ function commerce_search_api_menu() {
     'description' => 'Configure the generated product display index.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('commerce_search_api_admin_settings_form'),
+    'access callback' => 'commerce_search_api_admin_settings_access',
     'access arguments' => array('administer site configuration'),
     'type' => MENU_NORMAL_ITEM,
     'file' => 'includes/commerce_search_api.admin.inc',
   );
   return $items;
+}
+
+/**
+ * Access calback for the index admin settings form.
+ */
+function commerce_search_api_admin_settings_access($permission) {
+  return search_api_index_load('product_display') && user_access($permission);
 }
 
 /**
