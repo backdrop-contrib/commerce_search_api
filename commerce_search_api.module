@@ -369,3 +369,54 @@ function commerce_search_api_facetapi_filters() {
   );
   return $filters;
 }
+
+/**
+ * Implements hook_facetapi_widgets().
+ */
+function commerce_search_api_facetapi_widgets() {
+  return array(
+    'commerce_search_api_fancy' => array(
+      'handler' => array(
+        'label' => t('Fancy attributes'),
+        'class' => 'CommerceSearchApiFancy',
+        'query types' => array('term'),
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_theme().
+ */
+function commerce_search_api_theme() {
+  return array(
+    'commerce_search_api_fancy_attributes_color' => array(
+      'variables' => array(
+        'title' => '',
+        'hex' => NULL,
+      ),
+    ),
+  );
+}
+
+/**
+ * Return a <span> tag representing the passed-in color.
+ *
+ * @param $variables
+ *   Variables available for this theming function:
+ *     - hex: Hex representation of the color to display.
+ *     - title: The facet count.
+ * @return string
+ */
+function theme_commerce_search_api_fancy_attributes_color($variables) {
+    // Make sure the value is prefixed by #.
+  if (!substr($variables['hex'], 0, 1) == '#') {
+    $variables['hex'] = '#' . $variables['hex'];
+  }
+  $return = '<span style="background-color: ' . $variables['hex'] . ';" class="commerce-search-api-fancy-attributes-color">';
+  if (!empty($variables['title'])) {
+    $return .= '<span>' . $variables['title'] . '</span>';
+  }
+  $return .= '</span>';
+  return $return;
+}
