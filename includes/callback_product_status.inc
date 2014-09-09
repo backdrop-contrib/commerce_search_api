@@ -22,7 +22,7 @@ class CommerceSearchApiAlterProductStatus extends SearchApiAbstractAlterCallback
    */
   public function supportsIndex(SearchApiIndex $index) {
     $bundles = commerce_product_reference_node_types();
-    return ($index->item_type == 'node' && !empty($bundles));
+    return ($index->getEntityType() == 'node' && !empty($bundles));
   }
 
   /**
