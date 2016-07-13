@@ -118,6 +118,12 @@ function commerce_search_api_generate_product_display_index(SearchApiServer $ser
   foreach ($index->getFields(FALSE) as $field_name => $field) {
     // Index term reference fields.
     if (isset($field['entity_type']) && $field['entity_type'] == 'taxonomy_term') {
+      $field_info = field_info_field($field_name);
+      // Check if the field belongs to a product display bundle to include it
+      // in the index and create the aggregated field.
+      if (!empty($field_info['bundles']['node']) && !array_intersect($field_info['bundles']['node'], $product_reference_field['bundles']['node'])) {
+        continue;
+      }
       $values['options']['fields'] += array(
         $field_name => array(
           'type' => $field['type'],
