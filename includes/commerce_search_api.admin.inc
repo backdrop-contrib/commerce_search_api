@@ -4,7 +4,6 @@
  * @file
  * Admin page callbacks for the commerce_search_api module.
  */
-define('COMMERCE_SEARCH_API_INDEX', 'product_display');
 
 /**
  * Form constructor for the Commerce Search API form.

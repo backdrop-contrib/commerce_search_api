@@ -4,6 +4,7 @@
  * @file
  * Provides Search API integration for Drupal Commerce.
  */
+define('COMMERCE_SEARCH_API_INDEX', 'product_display');
 
 /**
  * Implements hook_ctools_plugin_api().
