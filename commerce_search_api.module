@@ -60,11 +60,8 @@ function commerce_search_api_default_search_api_index() {
 function commerce_search_api_entity_property_info_alter(&$info) {
   // Retrieve the product display from the product.
   $properties = &$info['commerce_product']['properties'];
-  foreach (field_info_fields() as $field) {
-    if ($field['module'] != 'commerce_product_reference') {
-      continue;
-    }
-    $field_name = $field['field_name'];
+  $product_reference_fields = commerce_info_fields('commerce_product_reference', 'node');
+  foreach ($product_reference_fields as $field_name => $field) {
     foreach ($field['bundles'] as $entity_type => $bundles) {
       $properties[$field_name . '_' . $entity_type] = array(
         'description' => t('A bridge to @entity_type referenced by @field_name', array(
@@ -108,19 +105,26 @@ function commerce_search_api_search_api_alter_callback_info() {
 /**
  * Getter callback for retrieving related entities.
  */
-function commerce_search_api_backreference_getter($entity, array $options, $name, $type, $info) {
-  $entities_ids = array();
-  // Retrieve the field.
+function commerce_search_api_backreference_getter($product, array $options, $name, $type, $info) {
   $field = $info['field'];
-  $entity_target_type = $info['target type'];
-  $entity_wrapper = entity_metadata_wrapper($type, $entity);
+  $target_type = $info['target type'];
+  return commerce_search_api_get_related_entities($product, $field['field_name'], $target_type);
+}
+
+/**
+ * Helper function used to retrieve the entities that reference a product.
+ */
+function commerce_search_api_get_related_entities($product, $field_name, $target_type) {
+  $entities_ids = array();
   $query = new EntityFieldQuery();
-  $query->entityCondition('entity_type', $entity_target_type, '=')
-    ->fieldCondition($field['field_name'], 'product_id', $entity_wrapper->getIdentifier(), '=');
+  $query->entityCondition('entity_type', $target_type, '=')
+    ->fieldCondition($field_name, 'product_id', $product->product_id, '=');
   $result = $query->execute();
-  if (isset($result[$entity_target_type])) {
-    $entities_ids = array_keys($result[$entity_target_type]);
+
+  if (isset($result[$target_type])) {
+    $entities_ids = array_keys($result[$target_type]);
   }
+
   return $entities_ids;
 }
 
@@ -194,4 +198,61 @@ function theme_commerce_search_api_fancy_attributes_color($variables) {
   }
   $return .= '</span>';
   return $return;
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function commerce_search_api_entity_insert($entity, $type) {
+  commerce_search_api_track_item_change($entity, $type);
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function commerce_search_api_entity_update($entity, $type) {
+  commerce_search_api_track_item_change($entity, $type);
+}
+
+/**
+ * Reindex the product display when a product variation is updated.
+ *
+ * @param $entity
+ *   The entity that is being inserted or updated.
+ *
+ * @param $type
+ *   The type of entity.
+ */
+function commerce_search_api_track_item_change($entity, $type) {
+  if ($type != 'commerce_product') {
+    return;
+  }
+  $product_reference_fields = commerce_info_fields('commerce_product_reference', 'node');
+  $properties = array();
+
+  foreach ($product_reference_fields as $field_name => $field) {
+    foreach ($field['bundles'] as $entity_type => $bundles) {
+      if ($entity_type != 'node') {
+        continue;
+      }
+      $properties[] = $field_name . '_' . $entity_type;
+    }
+  }
+
+  // Retrieve all the product displays that reference this product.
+  if ($properties) {
+    $product_wrapper = entity_metadata_wrapper($type, $entity);
+    $item_ids = array();
+    $item_ids_multiple = array();
+
+    // Gather the product displays nids from the properties we expose.
+    foreach ($properties as $property_name) {
+      foreach ($product_wrapper->{$property_name}->raw() as $nid) {
+        $item_ids[] = $nid;
+        $item_ids_multiple[] = 'node/' . $nid;
+      }
+    }
+    search_api_track_item_change('node', $item_ids);
+    search_api_track_item_change('multiple', $item_ids_multiple);
+  }
 }
