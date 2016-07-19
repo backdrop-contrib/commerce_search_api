@@ -14,13 +14,14 @@
  *   The machine name of the generated index.
  *
  * @return SearchApiIndex
- *   The generated SearchApiIndex.
+ *   The generated SearchApiIndex or FALSE if no product reference fields
+ *   were found.
  */
 function commerce_search_api_generate_product_display_index(SearchApiServer $server, $index_machine_name) {
   $product_reference_fields = commerce_info_fields('commerce_product_reference', 'node');
   // We only generate an index if there are product display types.
   if (empty($product_reference_fields) || !isset($server->machine_name)) {
-    return entity_create('search_api_index', array());
+    return FALSE;
   }
   $title = 'title';
   // Check if we should index the translated title or not.

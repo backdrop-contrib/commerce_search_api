@@ -50,8 +50,10 @@ function commerce_search_api_default_search_api_index() {
     }
     $server = reset($servers);
   }
-  $items[COMMERCE_SEARCH_API_INDEX] = commerce_search_api_generate_product_display_index($server, COMMERCE_SEARCH_API_INDEX);
-  return $items;
+  if ($index = commerce_search_api_generate_product_display_index($server, COMMERCE_SEARCH_API_INDEX)) {
+    $items[COMMERCE_SEARCH_API_INDEX] = $index;
+    return $items;
+  }
 }
 
 /**
