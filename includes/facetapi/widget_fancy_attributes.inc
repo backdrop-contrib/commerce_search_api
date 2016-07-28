@@ -10,19 +10,6 @@
 class CommerceSearchApiFancy extends FacetapiWidgetLinks {
 
   /**
-   * Overrides FacetapiWidget:Links:settingsForm().
-   */
-  function settingsForm(&$form, &$form_state) {
-    parent::settingsForm($form, $form_state);
-    $form['widget']['widget_settings']['links'][$this->id]['display_count'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Display the number of matching items'),
-      '#default_value' => !empty($this->settings->settings['display_count']) ? $this->settings->settings['display_count'] : FALSE,
-      '#description' => t('If checked, the number of matching items will be output with the color square.'),
-    );
-  }
-
-  /**
    * Overrides FacetapiWidgetLinks::buildListItems().
    *
    * Add our css file and call our theme function to theme taxonomy terms as
