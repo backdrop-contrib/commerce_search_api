@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Provides Search API integration for Drupal Commerce.
+ * Provides Search API integration for Backdrop Commerce.
  */
 define('COMMERCE_SEARCH_API_INDEX', 'product_display');
 
@@ -22,7 +22,7 @@ function commerce_search_api_menu() {
   $items['admin/commerce/config/commerce_search_api'] = array(
     'title' => 'Commerce Search API',
     'description' => 'Configure the generated product display index.',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('commerce_search_api_admin_settings_form'),
     'access arguments' => array('configure store'),
     'type' => MENU_NORMAL_ITEM,
@@ -32,13 +32,37 @@ function commerce_search_api_menu() {
 }
 
 /**
+ * Implements hook_config_info().
+ */
+function commerce_search_api_config_info() {
+  $prefixes['commerce_search_api.settings'] = array(
+    'label' => t('Commerce Search API settings'),
+    'group' => t('Configuration'),
+  );
+  return $prefixes;
+}
+
+/**
+ * Implements hook_autoload_info().
+ */
+function commerce_search_api_autoload_info() {
+  return array(
+    'CommerceSearchApiAlterProductStatus' => 'includes/callback_product_status.inc',
+    'CommerceSearchApiProductDisplayFilter' => 'includes/commerce_search_api_product_display_filter.inc',
+    'CommerceSearchApiSameSearch' => 'includes/facetapi/filter_same_search.inc',
+    'CommerceSearchApiSearchStart' => 'includes/facetapi/filter_search_start.inc',
+    'CommerceSearchApiFancy' => 'includes/facetapi/widget_fancy_attributes.inc',
+  );
+}
+
+/**
  * Implements hook_default_search_api_index().
  *
  * Create an automatic product display index.
  */
 function commerce_search_api_default_search_api_index() {
   // Don't generate a default Search Index if unnecessary.
-  if (!variable_get('commerce_search_api_provide_default_index', TRUE)) {
+  if (!config_get('commerce_search_api.settings', 'commerce_search_api_provide_default_index')) {
     return;
   }
   module_load_include('inc', 'commerce_search_api', 'includes/commerce_search_api.callbacks');
@@ -190,7 +214,7 @@ function commerce_search_api_theme() {
  * @return string
  */
 function theme_commerce_search_api_fancy_attributes_color($variables) {
-    // Make sure the value is prefixed by #.
+  // Make sure the value is prefixed by #.
   if (!substr($variables['hex'], 0, 1) == '#') {
     $variables['hex'] = '#' . $variables['hex'];
   }

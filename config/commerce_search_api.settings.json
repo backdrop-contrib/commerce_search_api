@@ -1,0 +1,5 @@
+{
+    "_config_name": "commerce_search_api.settings",
+    "commerce_search_api_generate_facets": true,
+    "commerce_search_api_provide_default_index": true
+}

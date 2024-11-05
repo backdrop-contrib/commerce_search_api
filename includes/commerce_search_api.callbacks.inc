@@ -175,7 +175,7 @@ function commerce_search_api_generate_product_display_index(SearchApiServer $ser
               'status' => 1,
               'weight' => 1,
               'settings' => array(
-                'fields' => drupal_map_assoc(array($field_name)),
+                'fields' => backdrop_map_assoc(array($field_name)),
               ),
             ),
           );

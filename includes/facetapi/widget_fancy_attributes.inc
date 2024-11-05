@@ -33,7 +33,7 @@ class CommerceSearchApiFancy extends FacetapiWidgetLinks {
       }
       // If we've found at least one field that uses the fancy attributes formatter.
       if ($fancy_attribute_field) {
-        drupal_add_css(drupal_get_path('module', 'commerce_search_api') . '/commerce_search_api.css');
+        backdrop_add_css(backdrop_get_path('module', 'commerce_search_api') . '/commerce_search_api.css');
         foreach ($build as $value => &$item) {
           $term_wrapper = entity_metadata_wrapper('taxonomy_term', $terms[$value]);
           if (!isset($term_wrapper->{$fancy_attribute_field})) {
