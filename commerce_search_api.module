@@ -7,9 +7,9 @@
 define('COMMERCE_SEARCH_API_INDEX', 'product_display');
 
 /**
- * Implements hook_ctools_plugin_api().
+ * Implements hook_plugin_manager_api().
  */
-function commerce_search_api_ctools_plugin_api($module, $api) {
+function commerce_search_api_plugin_manager_api($module, $api) {
   if ($module == "facetapi" && $api == "facetapi_defaults") {
     return array("version" => 1);
   }
